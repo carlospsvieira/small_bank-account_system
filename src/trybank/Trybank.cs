@@ -124,7 +124,31 @@ public class Trybank
   // 7. Construa a funcionalidade de transferir dinheiro entre contas
   public void Transfer(int destinationNumber, int destinationAgency, int value)
   {
-    throw new NotImplementedException();
+    if (Logged == false)
+    {
+      throw new AccessViolationException("Usuário não está logado");
+    }
+
+    if (Bank[loggedUser, 3] < value)
+    {
+      throw new InvalidOperationException("Saldo insuficiente");
+    }
+
+    try
+    {
+      for (int i = 0; i < registeredAccounts; i++)
+      {
+        if (Bank[i, 0] == destinationNumber && Bank[i, 1] == destinationAgency)
+        {
+          Bank[loggedUser, 3] -= value;
+          Bank[i, 3] += value;
+        }
+      }
+    }
+    catch (ArgumentException)
+    {
+      throw new ArgumentException("Agência + Conta não encontrada");
+    }
   }
 
 
